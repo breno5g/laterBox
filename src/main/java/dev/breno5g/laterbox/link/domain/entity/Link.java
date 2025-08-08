@@ -40,9 +40,8 @@ public class Link {
     @Timestamp
     private LocalDateTime readAt;
 
-    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UUID userId;
 
     @ManyToMany
     @JoinTable(name = "link_tag",
