@@ -8,6 +8,8 @@ import dev.breno5g.laterbox.user.domain.entity.User;
 import dev.breno5g.laterbox.user.domain.mapper.UserMapper;
 import dev.breno5g.laterbox.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +32,10 @@ public class UserService implements IUserService {
         final User user = UserMapper.map(createUserDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
