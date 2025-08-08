@@ -8,6 +8,7 @@ import dev.breno5g.laterbox.user.domain.entity.User;
 import dev.breno5g.laterbox.user.domain.mapper.UserMapper;
 import dev.breno5g.laterbox.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void createUser(CreateUserDTO createUserDTO) throws UserAlreadyExistsException {
@@ -26,6 +28,7 @@ public class UserService implements IUserService {
         }
 
         final User user = UserMapper.map(createUserDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userRepository.save(user);
     }
 }
