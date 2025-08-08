@@ -1,6 +1,8 @@
 package dev.breno5g.laterbox.user.application.service;
 
 import dev.breno5g.laterbox.user.application.dto.CreateUserDTO;
+import dev.breno5g.laterbox.user.application.exceptions.UserAlreadyExistsException;
+import dev.breno5g.laterbox.user.application.exceptions.UserExceptions;
 import dev.breno5g.laterbox.user.application.service.Interface.IUserService;
 import dev.breno5g.laterbox.user.domain.entity.User;
 import dev.breno5g.laterbox.user.domain.mapper.UserMapper;
@@ -16,11 +18,11 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
 
     @Override
-    public void createUser(CreateUserDTO createUserDTO) {
+    public void createUser(CreateUserDTO createUserDTO) throws UserAlreadyExistsException {
         final Optional<User> userOptional = this.userRepository.findByUsername(createUserDTO.username());
 
         if (userOptional.isPresent()) {
-            throw new RuntimeException("User already exists");
+            throw UserExceptions.USER_ALREADY_EXISTS_EXCEPTION;
         }
 
         final User user = UserMapper.map(createUserDTO);
