@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Optional;
 
 @Component
@@ -23,6 +22,7 @@ public class TokenService {
 
         return JWT.create()
                 .withClaim("userId", user.getId().toString())
+                .withClaim("username", user.getUsername())
                 .withExpiresAt(Instant.now().plusSeconds(86400))
                 .withIssuedAt(Instant.now())
                 .withIssuer("LaterBox")
