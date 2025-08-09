@@ -15,3 +15,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+
+laterBox:
+  security:
+    secret: ${JWT_SECRET}
