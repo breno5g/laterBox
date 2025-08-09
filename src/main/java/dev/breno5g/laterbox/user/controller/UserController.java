@@ -5,13 +5,11 @@ import dev.breno5g.laterbox.user.application.dto.CreateUserDTO;
 import dev.breno5g.laterbox.user.application.dto.ResponseUserDTO;
 import dev.breno5g.laterbox.user.application.exceptions.InvalidUsernameOrPasswordException;
 import dev.breno5g.laterbox.user.application.exceptions.UserAlreadyExistsException;
-import dev.breno5g.laterbox.user.application.exceptions.UserExceptions;
 import dev.breno5g.laterbox.user.application.service.UserService;
 import dev.breno5g.laterbox.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,18 +32,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseUserDTO> login(@RequestBody CreateUserDTO request) throws InvalidUsernameOrPasswordException {
-        try {
-            UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.username(), request.password());
-            Authentication authenticate = authenticationManager.authenticate(userAndPass);
+    public ResponseEntity<ResponseUserDTO> login(@RequestBody CreateUserDTO request) {
+        UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.username(), request.password());
+        Authentication authenticate = authenticationManager.authenticate(userAndPass);
 
-            User user = (User) authenticate.getPrincipal();
+        User user = (User) authenticate.getPrincipal();
 
-            String token = this.tokenService.generateToken(user);
+        String token = this.tokenService.generateToken(user);
 
-            return ResponseEntity.ok(new ResponseUserDTO(token));
-        } catch (BadCredentialsException e) {
-            throw UserExceptions.INVALID_USERNAME_OR_PASSWORD_EXCEPTION;
-        }
+        return ResponseEntity.ok(new ResponseUserDTO(token));
     }
 }
