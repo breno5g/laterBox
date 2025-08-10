@@ -10,6 +10,6 @@ public record CreateLinkDTO(
         @NotNull String url,
         @NotNull String title,
         @NotNull String description,
-        @NotNull UUID user_id
+        @NotNull UUID userId
 ) {
 }
