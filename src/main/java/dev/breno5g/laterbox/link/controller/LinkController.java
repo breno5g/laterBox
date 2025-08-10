@@ -4,6 +4,7 @@ import dev.breno5g.laterbox.link.application.dto.CreateLinkDTO;
 import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.application.exceptions.LinkAlreadyExistsException;
 import dev.breno5g.laterbox.link.application.service.LinkService;
+import dev.breno5g.laterbox.link.controller.Interface.ILinkController;
 import dev.breno5g.laterbox.link.domain.entity.Link;
 import dev.breno5g.laterbox.link.domain.mapper.LinkMapper;
 import jakarta.validation.Valid;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/links")
 @RequiredArgsConstructor
-public class LinkController {
+public class LinkController implements ILinkController {
     private final LinkService linkService;
 
     @PostMapping
