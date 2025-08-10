@@ -13,8 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class LinkService implements ILinkInterface {
@@ -23,26 +21,18 @@ public class LinkService implements ILinkInterface {
 
     @Transactional
     public Link create(CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException {
-        final Optional<Link> optLink = this.linkRepository.findByUrl(createLinkDTO.url());
-        if (optLink.isPresent()) {
+        if (linkRepository.findByUrl(createLinkDTO.url()).isPresent()) {
             throw LinkExceptions.LINK_ALREADY_EXISTS_EXCEPTION;
-        }
+        };
 
-        if (createLinkDTO.tags().isEmpty()) {
-            final Link link = LinkMapper.map(createLinkDTO);
-            return linkRepository.save(link);
-        }
+        createLinkDTO.tags().forEach(tag ->
+                tagRepository.findByNameAndUser_Id(tag.getName(), createLinkDTO.userId())
+                        .orElseGet(() -> {
+                            tag.setUser(User.builder().id(createLinkDTO.userId()).build());
+                            return tagRepository.save(tag);
+                        })
+        );
 
-        createLinkDTO.tags().forEach(tag -> {
-            tagRepository.findByNameAndUser_Id(tag.getName(), createLinkDTO.userId()).orElseGet(() -> {
-                User user = User.builder().id(createLinkDTO.userId()).build();
-                tag.setUser(user);
-                return tagRepository.save(tag);
-            });
-        });
-
-        final Link link = LinkMapper.map(createLinkDTO);
-        this.linkRepository.save(link);
-        return link;
+        return linkRepository.save(LinkMapper.map(createLinkDTO));
     }
 }
