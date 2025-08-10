@@ -29,7 +29,13 @@ public class LinkController implements ILinkController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         JWTUserData userData = (JWTUserData) auth.getPrincipal();
-        CreateLinkDTO linkDTO = new CreateLinkDTO(createLinkDTO.title(), createLinkDTO.description(), createLinkDTO.url(), userData.userId());
+        CreateLinkDTO linkDTO = new CreateLinkDTO(
+                createLinkDTO.url(),
+                createLinkDTO.title(),
+                createLinkDTO.description(),
+                createLinkDTO.tags(),
+                userData.userId()
+        );
         final Link link = this.linkService.create(linkDTO);
         return ResponseEntity.ok(LinkMapper.map(link));
     }
