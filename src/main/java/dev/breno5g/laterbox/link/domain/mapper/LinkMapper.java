@@ -23,6 +23,7 @@ public class LinkMapper {
         return ResponseLinkDTO
                 .builder()
                 .id(link.getId())
+                .url(link.getUrl())
                 .title(link.getTitle())
                 .description(link.getDescription())
                 .createdAt(link.getCreatedAt())
