@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class TokenService {
@@ -22,7 +23,7 @@ public class TokenService {
 
         return JWT.create()
                 .withClaim("userId", user.getId().toString())
-                .withClaim("username", user.getUsername())
+                .withSubject(user.getUsername())
                 .withExpiresAt(Instant.now().plusSeconds(86400))
                 .withIssuedAt(Instant.now())
                 .withIssuer("LaterBox")
@@ -38,8 +39,8 @@ public class TokenService {
                     .verify(token);
 
             return Optional.of(JWTUserData.builder()
-                    .userId(decode.getClaim("userId").asLong())
-                    .username(decode.getClaim("username").asString())
+                    .userId(UUID.fromString(decode.getClaim("userId").asString()))
+                    .username(decode.getSubject())
                     .build());
 
         } catch (JWTVerificationException ex) {

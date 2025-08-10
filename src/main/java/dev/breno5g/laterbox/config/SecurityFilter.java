@@ -23,7 +23,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     String authorizationHeader = request.getHeader("Authorization");
     if (Strings.isNotEmpty(authorizationHeader) && authorizationHeader.startsWith("Bearer")){
-        String token = authorizationHeader.substring("Bearer .".length());
+        String token = authorizationHeader.substring("Bearer ".length());
         Optional<JWTUserData> optUser = this.tokenService.validateToken(token);
 
         if (optUser.isPresent()) {
