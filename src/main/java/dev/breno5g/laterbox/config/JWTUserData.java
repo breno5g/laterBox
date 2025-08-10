@@ -3,5 +3,5 @@ package dev.breno5g.laterbox.config;
 import lombok.Builder;
 
 @Builder
-public record JWTUserData(Long userId) {
+public record JWTUserData(Long userId, String username) {
 }

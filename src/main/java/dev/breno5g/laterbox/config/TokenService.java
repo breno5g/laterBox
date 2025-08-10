@@ -39,6 +39,7 @@ public class TokenService {
 
             return Optional.of(JWTUserData.builder()
                     .userId(decode.getClaim("userId").asLong())
+                    .username(decode.getClaim("username").asString())
                     .build());
 
         } catch (JWTVerificationException ex) {
