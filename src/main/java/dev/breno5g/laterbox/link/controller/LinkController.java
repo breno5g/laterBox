@@ -1,5 +1,6 @@
 package dev.breno5g.laterbox.link.controller;
 
+import dev.breno5g.laterbox.config.JWTUserData;
 import dev.breno5g.laterbox.link.application.dto.CreateLinkDTO;
 import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.application.exceptions.LinkAlreadyExistsException;
@@ -10,6 +11,8 @@ import dev.breno5g.laterbox.link.domain.mapper.LinkMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +26,11 @@ public class LinkController implements ILinkController {
 
     @PostMapping
     public ResponseEntity<ResponseLinkDTO> create(@Valid @RequestBody CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException {
-        final Link link = this.linkService.create(createLinkDTO);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        JWTUserData userData = (JWTUserData) auth.getPrincipal();
+        CreateLinkDTO linkDTO = new CreateLinkDTO(createLinkDTO.title(), createLinkDTO.description(), createLinkDTO.url(), userData.userId());
+        final Link link = this.linkService.create(linkDTO);
         return ResponseEntity.ok(LinkMapper.map(link));
     }
 }

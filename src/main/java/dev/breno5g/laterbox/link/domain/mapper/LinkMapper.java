@@ -5,8 +5,6 @@ import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.domain.entity.Link;
 import lombok.experimental.UtilityClass;
 
-import java.util.UUID;
-
 @UtilityClass
 public class LinkMapper {
     public static Link map(CreateLinkDTO createLinkDTO) {
@@ -15,7 +13,7 @@ public class LinkMapper {
                 .title(createLinkDTO.title())
                 .description(createLinkDTO.description())
                 .url(createLinkDTO.url())
-                .userId(UUID.fromString(createLinkDTO.userId()))
+                .userId(createLinkDTO.userId())
                 .build();
     }
 
