@@ -14,6 +14,7 @@ public class LinkMapper {
                 .description(createLinkDTO.description())
                 .url(createLinkDTO.url())
                 .userId(createLinkDTO.userId())
+                .tags(createLinkDTO.tags())
                 .build();
     }
 
