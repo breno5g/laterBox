@@ -1,5 +1,6 @@
 package dev.breno5g.laterbox.tag.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.breno5g.laterbox.link.domain.entity.Link;
 import dev.breno5g.laterbox.user.domain.entity.User;
 import jakarta.persistence.*;
@@ -25,8 +26,10 @@ public class Tag {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToMany
+    @JsonIgnore
     private List<Link> links;
 }
