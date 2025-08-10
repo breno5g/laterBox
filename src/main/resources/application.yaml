@@ -16,6 +16,13 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
+
 laterBox:
   security:
     secret: ${JWT_SECRET}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger/index.html
