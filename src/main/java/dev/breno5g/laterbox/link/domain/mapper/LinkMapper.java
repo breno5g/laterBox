@@ -29,6 +29,7 @@ public class LinkMapper {
                 .readAt(link.getReadAt())
                 .isFavorite(link.getIsFavorite())
                 .userId(link.getUserId())
+                .tags(link.getTags())
                 .build();
     }
 }
