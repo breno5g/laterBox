@@ -1,4 +1,4 @@
-package dev.breno5g.laterbox.tag.domain.application.dto;
+package dev.breno5g.laterbox.tag.application.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 
