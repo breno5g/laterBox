@@ -1,11 +1,12 @@
 package dev.breno5g.laterbox.link.domain.entity;
 
 import dev.breno5g.laterbox.tag.domain.entity.Tag;
-import dev.breno5g.laterbox.user.domain.entity.User;
 import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,5 +49,6 @@ public class Link {
         joinColumns = @JoinColumn(name = "link_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Tag> tags;
 }
