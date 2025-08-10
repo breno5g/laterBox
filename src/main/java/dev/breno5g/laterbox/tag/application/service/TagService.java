@@ -3,6 +3,7 @@ package dev.breno5g.laterbox.tag.application.service;
 import dev.breno5g.laterbox.tag.application.dto.CreateTagDTO;
 import dev.breno5g.laterbox.tag.application.exceptions.TagAlreadyExistsException;
 import dev.breno5g.laterbox.tag.application.exceptions.TagExceptions;
+import dev.breno5g.laterbox.tag.application.exceptions.TagNotFoundException;
 import dev.breno5g.laterbox.tag.application.service.Interface.ITagService;
 import dev.breno5g.laterbox.tag.domain.entity.Tag;
 import dev.breno5g.laterbox.tag.domain.repository.TagRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +36,11 @@ public class TagService implements ITagService {
 
         this.tagRepository.save(tag);
         return tag;
+    }
+
+    @Override
+    public Tag findByIdAndUserId(UUID id, UUID userId) throws TagNotFoundException {
+        return this.tagRepository.findByIdAndUser_Id(id, userId)
+                .orElseThrow(() -> TagExceptions.TAG_NOT_FOUND_EXCEPTION);
     }
 }
