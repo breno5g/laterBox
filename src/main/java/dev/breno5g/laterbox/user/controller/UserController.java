@@ -5,6 +5,7 @@ import dev.breno5g.laterbox.user.application.dto.CreateUserDTO;
 import dev.breno5g.laterbox.user.application.dto.ResponseUserDTO;
 import dev.breno5g.laterbox.user.application.exceptions.UserAlreadyExistsException;
 import dev.breno5g.laterbox.user.application.service.UserService;
+import dev.breno5g.laterbox.user.controller.Interface.IUserController;
 import dev.breno5g.laterbox.user.domain.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements IUserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
