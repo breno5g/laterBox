@@ -1,15 +1,11 @@
 package dev.breno5g.laterbox.link.application.dto;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
+import jakarta.validation.constraints.NotEmpty;
 
-import java.util.UUID;
-
-@Builder
 public record CreateLinkDTO(
-        @NotNull String url,
-        @NotNull String title,
-        @NotNull String description,
-        @NotNull UUID userId
+        @NotEmpty(message = "Link url must not be empty") String url,
+        @NotEmpty(message = "Link title must not be empty") String title,
+        @NotEmpty(message = "Link description must not be empty") String description,
+        @NotEmpty(message = "User id must not be empty") String userId
 ) {
 }
