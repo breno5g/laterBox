@@ -50,7 +50,7 @@ class TagIntegrationTest {
     @DisplayName("Should create a new tag successfully")
     void createTag_success() throws Exception {
         String name = "tag_" + UUID.randomUUID();
-        CreateTagDTO dto = new CreateTagDTO(name, "#FFFFFF", null);
+        CreateTagDTO dto = new CreateTagDTO(name, "#FFFFFF", null, null);
 
         mockMvc.perform(post("/tags")
                         .header("Authorization", "Bearer " + jwtToken)
@@ -67,7 +67,7 @@ class TagIntegrationTest {
     @DisplayName("Should fail with Internal Server Error when creating duplicate tag for the same user")
     void createTag_duplicate_fails() throws Exception {
         String name = "tag_" + UUID.randomUUID();
-        CreateTagDTO dto = new CreateTagDTO(name, "#000000", null);
+        CreateTagDTO dto = new CreateTagDTO(name, "#000000", null, null);
 
         mockMvc.perform(post("/tags")
                         .header("Authorization", "Bearer " + jwtToken)
@@ -86,7 +86,7 @@ class TagIntegrationTest {
     @Test
     @DisplayName("Should return 400 Bad Request when validation fails (empty name and color)")
     void createTag_validation_fails() throws Exception {
-        CreateTagDTO invalid = new CreateTagDTO("", "", null);
+        CreateTagDTO invalid = new CreateTagDTO("", "", null, null);
 
         mockMvc.perform(post("/tags")
                         .header("Authorization", "Bearer " + jwtToken)
@@ -95,13 +95,13 @@ class TagIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name", is("Tag name must not be empty")))
-                .andExpect(jsonPath("$.color", is("Tag color must not be empty")));
+                .andExpect(jsonPath("$.color", is("Tag color must be a hexadecimal color")));
     }
 
     @Test
     @DisplayName("Should reject unauthorized request without JWT token")
     void createTag_unauthorized() throws Exception {
-        CreateTagDTO dto = new CreateTagDTO("tag_" + UUID.randomUUID(), "#ABCDEF", null);
+        CreateTagDTO dto = new CreateTagDTO("tag_" + UUID.randomUUID(), "#ABCDEF", null, null);
 
         mockMvc.perform(post("/tags")
                         .contentType(MediaType.APPLICATION_JSON)

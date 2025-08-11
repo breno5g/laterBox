@@ -9,6 +9,8 @@ import dev.breno5g.laterbox.link.application.service.Interface.ILinkInterface;
 import dev.breno5g.laterbox.link.domain.entity.Link;
 import dev.breno5g.laterbox.link.domain.mapper.LinkMapper;
 import dev.breno5g.laterbox.link.domain.repository.LinkRepository;
+import dev.breno5g.laterbox.tag.domain.entity.Tag;
+import dev.breno5g.laterbox.tag.domain.mapper.TagMapper;
 import dev.breno5g.laterbox.tag.domain.repository.TagRepository;
 import dev.breno5g.laterbox.user.domain.entity.User;
 import jakarta.transaction.Transactional;
@@ -29,10 +31,11 @@ public class LinkService implements ILinkInterface {
         if (linkRepository.existsByUrl(createLinkDTO.url())) throw LinkExceptions.LINK_ALREADY_EXISTS_EXCEPTION;
 
         createLinkDTO.tags().forEach(tag -> {
-            if (tagRepository.existsTagByNameAndUserId(tag.getName(), createLinkDTO.userId())) return;
+            Tag dto = TagMapper.map(tag);
+            if (tagRepository.existsTagByNameAndUserId(dto.getName(), createLinkDTO.userId())) return;
 
-            tag.setUser(User.builder().id(createLinkDTO.userId()).build());
-            tagRepository.save(tag);
+            dto.setUser(User.builder().id(createLinkDTO.userId()).build());
+            tagRepository.save(dto);
         });
 
         return linkRepository.save(LinkMapper.map(createLinkDTO));

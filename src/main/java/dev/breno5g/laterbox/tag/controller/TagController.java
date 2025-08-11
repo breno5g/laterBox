@@ -30,6 +30,7 @@ public class TagController implements ITagController {
         CreateTagDTO dto = new CreateTagDTO(
                 createTagDTO.name(),
                 createTagDTO.color(),
+                null,
                 userData.userId()
         );
 

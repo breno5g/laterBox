@@ -3,6 +3,7 @@ package dev.breno5g.laterbox.link.domain.mapper;
 import dev.breno5g.laterbox.link.application.dto.CreateLinkDTO;
 import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.domain.entity.Link;
+import dev.breno5g.laterbox.tag.domain.mapper.TagMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class LinkMapper {
                 .description(createLinkDTO.description())
                 .url(createLinkDTO.url())
                 .userId(createLinkDTO.userId())
-                .tags(createLinkDTO.tags())
+                .tags(createLinkDTO.tags().stream().map(TagMapper::map).toList())
                 .build();
     }
 
