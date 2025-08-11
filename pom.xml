@@ -108,12 +108,6 @@
             <version>3.0.2</version>
         </dependency>
         <dependency>
-            <groupId>dev.breno5g</groupId>
-            <artifactId>laterBox</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>4.4.0</version>
