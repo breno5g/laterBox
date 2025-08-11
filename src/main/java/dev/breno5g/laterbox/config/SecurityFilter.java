@@ -1,18 +1,18 @@
 package dev.breno5g.laterbox.config;
 
+import dev.breno5g.laterbox.config.exceptions.RestSecurityExceptionHandler;
+import dev.breno5g.laterbox.config.exceptions.SecurityExceptions;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -21,20 +21,20 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    String authorizationHeader = request.getHeader("Authorization");
-    if (Strings.isNotEmpty(authorizationHeader) && authorizationHeader.startsWith("Bearer")){
-        String token = authorizationHeader.substring("Bearer ".length());
-        Optional<JWTUserData> optUser = this.tokenService.validateToken(token);
 
-        if (optUser.isPresent()) {
-            JWTUserData userData = optUser.get();
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userData, null, null);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        try {
+            String authHeader = request.getHeader("Authorization");
+            String token = authHeader.substring("Bearer ".length());
+            JWTUserData user = tokenService.validateToken(token).orElseThrow();
+
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(user, null, null));
+
+        } catch (Exception e) {
+            request.setAttribute(RestSecurityExceptionHandler.AUTH_ERROR_ATTRIBUTE,
+                    SecurityExceptions.INVALID_OR_EMPTY_TOKEN_MSG);
         }
 
-        filterChain.doFilter(request, response);
-    }
-    else
         filterChain.doFilter(request, response);
     }
 }
