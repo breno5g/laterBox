@@ -14,5 +14,5 @@ public interface LinkRepository extends JpaRepository<Link, UUID> {
     Boolean existsByUrl(String url);
     List<Link> findAllByUserId(UUID id);
     Optional<Link> findByUserId(UUID user_id);
-    void deleteByIdAndUserId(UUID id, UUID userId);
+    Integer deleteByIdAndUserId(UUID id, UUID userId);
 }

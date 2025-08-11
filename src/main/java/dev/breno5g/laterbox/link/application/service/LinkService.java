@@ -4,6 +4,7 @@ import dev.breno5g.laterbox.link.application.dto.CreateLinkDTO;
 import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.application.exceptions.LinkAlreadyExistsException;
 import dev.breno5g.laterbox.link.application.exceptions.LinkExceptions;
+import dev.breno5g.laterbox.link.application.exceptions.LinkNotFoundException;
 import dev.breno5g.laterbox.link.application.service.Interface.ILinkInterface;
 import dev.breno5g.laterbox.link.domain.entity.Link;
 import dev.breno5g.laterbox.link.domain.mapper.LinkMapper;
@@ -48,7 +49,8 @@ public class LinkService implements ILinkInterface {
     }
 
     @Transactional
-    public void deleteById(UUID id, UUID userId) {
-        this.linkRepository.deleteByIdAndUserId(id, userId);
+    public void deleteById(UUID id, UUID userId) throws LinkNotFoundException {
+        Integer deletedLink =this.linkRepository.deleteByIdAndUserId(id, userId);
+        if (deletedLink == 0) throw LinkExceptions.LINK_NOT_FOUND_EXCEPTION;
     }
 }
