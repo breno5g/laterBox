@@ -39,12 +39,11 @@ class LinkIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private String uniqueUsername;
     private String jwtToken;
 
     @BeforeEach
     void setUp() throws Exception {
-        uniqueUsername = "user_" + UUID.randomUUID();
+        String uniqueUsername = "user_" + UUID.randomUUID();
         jwtToken = registerAndLogin(uniqueUsername);
     }
 
@@ -97,7 +96,7 @@ class LinkIntegrationTest {
                         .content(objectMapper.writeValueAsString(invalid)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.url", is("Only http/https URLs are allowed")))
+                .andExpect(jsonPath("$.url", is("Link url must not be empty")))
                 .andExpect(jsonPath("$.title", is("Link title must not be empty")))
                 .andExpect(jsonPath("$.description", is("Link description must not be empty")));
     }
