@@ -26,7 +26,7 @@ public class LinkService implements ILinkInterface {
         };
 
         createLinkDTO.tags().forEach(tag ->
-                tagRepository.findByNameAndUser_Id(tag.getName(), createLinkDTO.userId())
+                tagRepository.findByNameAndUserId(tag.getName(), createLinkDTO.userId())
                         .orElseGet(() -> {
                             tag.setUser(User.builder().id(createLinkDTO.userId()).build());
                             return tagRepository.save(tag);

@@ -21,7 +21,7 @@ public class TagService implements ITagService {
 
     @Override
     public Tag create(CreateTagDTO createTagDTO) throws TagAlreadyExistsException {
-        final Optional<Tag> optTag = this.tagRepository.findByNameAndUser_Id(createTagDTO.name(), createTagDTO.userId());
+        final Optional<Tag> optTag = this.tagRepository.findByNameAndUserId(createTagDTO.name(), createTagDTO.userId());
         if (optTag.isPresent()) {
             throw TagExceptions.TAG_ALREADY_EXISTS_EXCEPTION;
         }
@@ -40,7 +40,7 @@ public class TagService implements ITagService {
 
     @Override
     public Tag findByIdAndUserId(UUID id, UUID userId) throws TagNotFoundException {
-        return this.tagRepository.findByIdAndUser_Id(id, userId)
+        return this.tagRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> TagExceptions.TAG_NOT_FOUND_EXCEPTION);
     }
 }
