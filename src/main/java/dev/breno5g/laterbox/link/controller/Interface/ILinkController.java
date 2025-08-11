@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @Tag(name = "Links", description = "Links endpoints")
 public interface ILinkController {
 
@@ -22,4 +24,11 @@ public interface ILinkController {
             @ApiResponse(responseCode = "409", description = "Link already exists", content = @Content)
     })
     ResponseEntity<ResponseLinkDTO> create(CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException;
+
+    @Operation(summary = "Get all links", description = "Returns all links for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Links found successfully",
+                    content = @Content(schema = @Schema(implementation = ResponseLinkDTO[].class)))
+    })
+    ResponseEntity<List<ResponseLinkDTO>> findAll();
 }
