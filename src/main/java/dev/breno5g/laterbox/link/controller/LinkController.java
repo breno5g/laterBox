@@ -24,6 +24,7 @@ import java.util.UUID;
 public class LinkController implements ILinkController {
     private final LinkService linkService;
 
+    @Override
     @PostMapping
     public ResponseEntity<ResponseLinkDTO> create(@Valid @RequestBody CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -51,13 +52,14 @@ public class LinkController implements ILinkController {
         return ResponseEntity.ok(links);
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") UUID id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         JWTUserData userData = (JWTUserData) auth.getPrincipal();
 
-        this.linkService.deleteById(UUID.fromString(String.valueOf(id)), userData.userId());
+        this.linkService.deleteById(id, userData.userId());
         return ResponseEntity.ok("Link deleted successfully");
     }
 }
