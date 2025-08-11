@@ -1,13 +1,12 @@
 package dev.breno5g.laterbox.link.application.dto;
 
 import dev.breno5g.laterbox.tag.application.dto.CreateTagDTO;
-import dev.breno5g.laterbox.tag.domain.entity.Tag;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public record CreateLinkDTO(
