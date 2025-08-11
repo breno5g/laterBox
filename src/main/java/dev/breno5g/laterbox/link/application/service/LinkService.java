@@ -45,12 +45,12 @@ public class LinkService implements ILinkInterface {
     }
 
     @Override
-    public Link findById(String id) {
+    public Link findById(UUID id) {
         return null;
     }
 
     @Override
-    public void deleteById(String id) {
-
+    public void deleteById(UUID id, UUID userId) {
+        this.linkRepository.deleteByIdAndUserId(id, userId);
     }
 }

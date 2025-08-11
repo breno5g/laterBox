@@ -11,6 +11,6 @@ import java.util.UUID;
 public interface ILinkInterface {
     Link create(CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException;
     List<ResponseLinkDTO> findAll(UUID userId);
-    Link findById(String id);
-    void deleteById(String id);
+    Link findById(UUID id);
+    void deleteById(UUID id, UUID userId);
 }
