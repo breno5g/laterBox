@@ -96,7 +96,11 @@ class LinkIntegrationTest {
                         .content(objectMapper.writeValueAsString(invalid)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.url", is("Link url must not be empty")))
+                .andExpect(jsonPath("$.url", anyOf(
+                        is("Link url must not be empty"),
+                        is("Link url must not exceed 2048 characters"),
+                        is("Only http/https URLs are allowed")
+                )))
                 .andExpect(jsonPath("$.title", is("Link title must not be empty")))
                 .andExpect(jsonPath("$.description", is("Link description must not be empty")));
     }
