@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/links")
@@ -48,5 +49,15 @@ public class LinkController implements ILinkController {
 
         final List<ResponseLinkDTO> links = this.linkService.findAll(userData.userId());
         return ResponseEntity.ok(links);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable("id") UUID id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        JWTUserData userData = (JWTUserData) auth.getPrincipal();
+
+        this.linkService.deleteById(UUID.fromString(String.valueOf(id)), userData.userId());
+        return ResponseEntity.ok("Link deleted successfully");
     }
 }

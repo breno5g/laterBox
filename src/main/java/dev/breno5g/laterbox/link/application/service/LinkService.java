@@ -37,19 +37,17 @@ public class LinkService implements ILinkInterface {
         return linkRepository.save(LinkMapper.map(createLinkDTO));
     }
 
-    @Override
     public List<ResponseLinkDTO> findAll(UUID userId) {
         List<Link> links = this.linkRepository.findAllByUserId(userId);
 
         return links.stream().map(LinkMapper::map).toList();
     }
 
-    @Override
     public Link findById(UUID id) {
         return null;
     }
 
-    @Override
+    @Transactional
     public void deleteById(UUID id, UUID userId) {
         this.linkRepository.deleteByIdAndUserId(id, userId);
     }

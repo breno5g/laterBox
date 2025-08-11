@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "Links", description = "Links endpoints")
 public interface ILinkController {
@@ -31,4 +32,11 @@ public interface ILinkController {
                     content = @Content(schema = @Schema(implementation = ResponseLinkDTO[].class)))
     })
     ResponseEntity<List<ResponseLinkDTO>> findAll();
+
+    @Operation(summary = "Delete a link", description = "Deletes a link for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Link deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Link not found", content = @Content)
+    })
+    ResponseEntity<String> deleteById(UUID id);
 }
