@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.breno5g.laterbox.TestcontainersConfiguration;
 import dev.breno5g.laterbox.link.application.dto.CreateLinkDTO;
-import dev.breno5g.laterbox.tag.domain.entity.Tag;
 import dev.breno5g.laterbox.user.application.dto.CreateUserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
