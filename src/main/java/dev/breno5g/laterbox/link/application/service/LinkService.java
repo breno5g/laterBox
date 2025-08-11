@@ -1,6 +1,7 @@
 package dev.breno5g.laterbox.link.application.service;
 
 import dev.breno5g.laterbox.link.application.dto.CreateLinkDTO;
+import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.application.exceptions.LinkAlreadyExistsException;
 import dev.breno5g.laterbox.link.application.exceptions.LinkExceptions;
 import dev.breno5g.laterbox.link.application.service.Interface.ILinkInterface;
@@ -13,6 +14,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class LinkService implements ILinkInterface {
@@ -21,18 +25,32 @@ public class LinkService implements ILinkInterface {
 
     @Transactional
     public Link create(CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException {
-        if (linkRepository.findByUrl(createLinkDTO.url()).isPresent()) {
-            throw LinkExceptions.LINK_ALREADY_EXISTS_EXCEPTION;
-        };
+        if (linkRepository.existsByUrl(createLinkDTO.url())) throw LinkExceptions.LINK_ALREADY_EXISTS_EXCEPTION;
 
-        createLinkDTO.tags().forEach(tag ->
-                tagRepository.findByNameAndUserId(tag.getName(), createLinkDTO.userId())
-                        .orElseGet(() -> {
-                            tag.setUser(User.builder().id(createLinkDTO.userId()).build());
-                            return tagRepository.save(tag);
-                        })
-        );
+        createLinkDTO.tags().forEach(tag -> {
+            if (tagRepository.existsTagByNameAndUserId(tag.getName(), createLinkDTO.userId())) return;
+
+            tag.setUser(User.builder().id(createLinkDTO.userId()).build());
+            tagRepository.save(tag);
+        });
 
         return linkRepository.save(LinkMapper.map(createLinkDTO));
+    }
+
+    @Override
+    public List<ResponseLinkDTO> findAll(UUID userId) {
+        List<Link> links = this.linkRepository.findAllByUserId(userId);
+
+        return links.stream().map(LinkMapper::map).toList();
+    }
+
+    @Override
+    public Link findById(String id) {
+        return null;
+    }
+
+    @Override
+    public void deleteById(String id) {
+
     }
 }
