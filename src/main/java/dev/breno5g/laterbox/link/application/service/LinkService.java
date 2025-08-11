@@ -28,17 +28,21 @@ public class LinkService implements ILinkInterface {
 
     @Transactional
     public Link create(CreateLinkDTO createLinkDTO) throws LinkAlreadyExistsException {
-        if (linkRepository.existsByUrl(createLinkDTO.url())) throw LinkExceptions.LINK_ALREADY_EXISTS_EXCEPTION;
+        if (linkRepository.existsByUrlAndUserId(createLinkDTO.url(), createLinkDTO.userId()))
+            throw LinkExceptions.LINK_ALREADY_EXISTS_EXCEPTION;
 
-        createLinkDTO.tags().forEach(tag -> {
-            Tag dto = TagMapper.map(tag);
-            if (tagRepository.existsTagByNameAndUserId(dto.getName(), createLinkDTO.userId())) return;
+        List<Tag> tags = createLinkDTO.tags().stream()
+                .map(TagMapper::map)
+                .map(tag -> tagRepository.findByNameAndUserId(tag.getName(), createLinkDTO.userId())
+                        .orElseGet(() -> {
+                            tag.setUser(User.builder().id(createLinkDTO.userId()).build());
+                            return tagRepository.save(tag);
+                        }))
+                .toList();
 
-            dto.setUser(User.builder().id(createLinkDTO.userId()).build());
-            tagRepository.save(dto);
-        });
-
-        return linkRepository.save(LinkMapper.map(createLinkDTO));
+        Link link = LinkMapper.map(createLinkDTO);
+        link.setTags(tags);
+        return linkRepository.save(link);
     }
 
     public List<ResponseLinkDTO> findAll(UUID userId) {

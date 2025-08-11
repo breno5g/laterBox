@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface LinkRepository extends JpaRepository<Link, UUID> {
     Optional<Link> findByUrl(String url);
-    Boolean existsByUrl(String url);
+    Boolean existsByUrlAndUserId(String url, UUID userId);
     List<Link> findAllByUserId(UUID id);
     Optional<Link> findByUserId(UUID user_id);
     Integer deleteByIdAndUserId(UUID id, UUID userId);
