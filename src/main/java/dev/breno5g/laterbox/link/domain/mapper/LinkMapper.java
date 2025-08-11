@@ -5,6 +5,8 @@ import dev.breno5g.laterbox.link.application.dto.ResponseLinkDTO;
 import dev.breno5g.laterbox.link.domain.entity.Link;
 import lombok.experimental.UtilityClass;
 
+import java.util.List;
+
 @UtilityClass
 public class LinkMapper {
     public static Link map(CreateLinkDTO createLinkDTO) {
