@@ -38,11 +38,17 @@ jobs:
       - name: Verificar Docker
         run: docker --version
 
-      - name: Rodar Maven com Testcontainers
+      - name: Rodar testes com cobertura
         env:
           POSTGRES_DB:       ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER:     ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_PORT:     ${{ secrets.POSTGRES_PORT }}
           JWT_SECRET:        ${{ secrets.JWT_SECRET }}
-        run: mvn clean verify
+        run: mvn clean verify jacoco:report
+
+      - name: Upload do relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: target/site/jacoco
